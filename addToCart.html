@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Menu</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href=@{/css/addToCart.css}>
+</head>
+<body>
+	<div class="nav">
+		<div class="logo">
+			<img src="Picture/logomuchmate1.png" alt="Logo">
+			                <h1 class="header">
+                    Munch<b style="color: #ff511c">Mate</b>
+                </h1>
+			
+		</div>
+		<ul>
+			<li><a class="home" th:href="@{/index}">Home</a></li>
+			<form class="" action="/deliveredOrders" method="get">
+				<li><a class="home" href="/deliveredOrders">Track Orders</a></li>
+			</form>
+			<li><a th:href="@{/aboutPageUser}">About Us</a></li>
+			<li><a th:href="@{/contactPageUser}">Contact</a></li>
+		</ul>
+		<form class="searchFoods" action="/foodSearch" method="post">
+			<input class="search-input" type="text" placeholder="Search..."
+				name="foodName">
+			<button class="search-button" type="submit">Search</button>
+		</form>
+			
+		<button th:onclick="window.location.href='cartlist'" id="viewCart" class="signin"><img src="Picture/viewcart.png" height="40px" width="40px" alt="Logo"></button>
+
+
+	</div>
+
+	<section class="menu">
+		
+
+		<div class="container">
+			<h2 class="text-center mb-4">Menu</h2>
+			<div class="row">
+				<div th:each="food : ${foods}" class="col-md-4">
+					<form th:action="@{/addToCart}" method="get"
+						enctype="multipart/form-data">
+
+						<button id="addBtn" type="submit"><img th:src="'data:image/jpeg;base64,' + ${food.base64Image}"
+							alt="Food Image" style="width: 300px; height: 300px;" /></button>
+						 <input
+							type="hidden" th:value="${food.foodPrice}" name="price">
+
+						<div class="card-body">
+							<h5 class="card-title" th:text="${food.hotelName}"></h5>
+							<p class="card-text" th:text="${food.foodName}"></p>
+							<p class="card-price">
+								Price: <span th:text="${food.foodPrice}"></span>
+							</p>
+							<input type="hidden" th:value="${food.foodPrice}" name="price">
+							<input type="hidden" th:value="${session.userid}" name="userid">
+							<input type="hidden" th:value="${food.foodName}" name="foodname">
+							<input type="hidden" th:value="${food.foodId}" name="foodid">
+							<input type="hidden" th:value="${food.hotelId}" name="hotelid">
+							<input type="hidden" th:value="${food.foodSession}"
+								name="mealTime">
+
+
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<button class="btn btn-outline-secondary" type="button"
+										onclick="decrementQuantity(this)">-</button>
+								</div>
+								<input type="text"
+									class="form-control text-center quantity-input" name="quantity"
+									value="1">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button"
+										onclick="incrementQuantity(this)">+</button>
+								</div>
+							</div>
+					<input type="submit" class="btn btn-primary btn-add-to-cart"
+								value="Add to Cart">
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+		</div>
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+		integrity="sha384-D2q2F1UzFwC1UKoTtHvHc3z47vI7me7Zndd+Us/6+99Bv1ahqo1BqFnF0+MYMWcq"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Tp5gFx6K5erx4Z+hHRXPDmPejcY0aSkzhB"
+		crossorigin="anonymous"></script>
+
+	<script>
+		function incrementQuantity(button) {
+			var input = button.parentElement.previousElementSibling;
+			var currentValue = parseInt(input.value);
+			input.value = currentValue + 1;
+		}
+		function decrementQuantity(button) {
+			var input = button.parentElement.nextElementSibling;
+			var currentValue = parseInt(input.value);
+			if (currentValue > 1) {
+				input.value = currentValue - 1;
+			}
+		}
+		
+	</script>
+
+</body>
+</html>
+

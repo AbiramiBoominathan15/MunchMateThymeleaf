@@ -2,6 +2,8 @@ package com.chainsys.munchmate.dao;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -187,9 +189,9 @@ public class UserImpl implements UserDAO {
 	public void addToCart(Cart cartItem) {
 		String save = "insert into cart(userid,hotelid,foodid,foodname,quantity,totalprice,mealtime,currentdate,price)values(?,?,?,?,?,?,?,?,?)";
 		Object[] params = { cartItem.getUserId(), cartItem.getHotelId(), cartItem.getFoodId(), cartItem.getFoodName(),
-				cartItem.getQuantity(), cartItem.getTotalPrice(), cartItem.getFoodSession(),
-				cartItem.getCurrentdate() ,cartItem.getFoodPrice()};
-		System.out.println("insert price value:"+cartItem.getFoodPrice());
+				cartItem.getQuantity(), cartItem.getTotalPrice(), cartItem.getFoodSession(), cartItem.getCurrentdate(),
+				cartItem.getFoodPrice() };
+		System.out.println("insert price value:" + cartItem.getFoodPrice());
 		int noOfRows = jdbcTemplate.update(save, params);
 		System.out.println("in DAO -save");
 
@@ -212,15 +214,13 @@ public class UserImpl implements UserDAO {
 		 * "    c.userid = ?  -- Replace ? with the actual userid you are querying for\r\n"
 		 * + "    AND c.active = 0;\r\n" + "";
 		 * 
-		 */	
-		String query="        SELECT c.userid, c.foodid, c.foodname,\r\n"
+		 */
+		String query = "        SELECT c.userid, c.foodid, c.foodname,\r\n"
 				+ "				  c.quantity,  c.totalprice,  c.mealtime,\r\n"
 				+ "				   f.image  FROM     cart c\r\n"
-				+ "				JOIN food f ON c.foodid = f.foodid WHERE \r\n"
-				+ "				   c.userid = ?\r\n"
-				+ "				   AND c.active = 0;\r\n"
-				+ "";
-		
+				+ "				JOIN food f ON c.foodid = f.foodid WHERE \r\n" + "				   c.userid = ?\r\n"
+				+ "				   AND c.active = 0;\r\n" + "";
+
 		return jdbcTemplate.query(query, new CartMapper(), userId);
 
 	}
@@ -239,7 +239,7 @@ public class UserImpl implements UserDAO {
 	public void updateCartItemQuantity(int foodId, int quantity) {
 		System.out.println("foodid:updatequantity" + foodId);
 		String updateQuery = "UPDATE cart SET quantity = ? ,totalprice=?*price WHERE foodid = ?";
-		jdbcTemplate.update(updateQuery, quantity,quantity, foodId);
+		jdbcTemplate.update(updateQuery, quantity, quantity, foodId);
 	}
 
 	@Override
@@ -303,7 +303,7 @@ public class UserImpl implements UserDAO {
 		 * String query =
 		 * "SELECT userid,hotelid,foodid,foodname,quantity,totalprice,mealtime ,currentdate,payment ,delivery_status ,priceFROM cart WHERE hotelid = ? and active=0"
 		 * ;
-		 */		String query = "SELECT userid,hotelid,foodid,foodname,quantity,totalprice,mealtime ,currentdate,delivery_status,price,payment FROM cart WHERE hotelid = ? and active=0";
+		 */ String query = "SELECT userid,hotelid,foodid,foodname,quantity,totalprice,mealtime ,currentdate,delivery_status,price,payment FROM cart WHERE hotelid = ? and active=0";
 
 		System.out.println(jdbcTemplate.query(query, new PurchaseMapper(), hotelId));
 		return jdbcTemplate.query(query, new PurchaseMapper(), hotelId);
@@ -355,7 +355,12 @@ public class UserImpl implements UserDAO {
 	}
 
 	@Override
-	public List<Cart> getDeliveredOrders() {
+	public List<Cart> getDeliveredOrders(int userId) {
+		String query = "SELECT userid, hotelid, foodid, foodname, quantity, totalprice, mealtime, currentdate,price, payment, delivery_status FROM cart WHERE active = 0 and userid=?";
+		return jdbcTemplate.query(query, new PurchaseMapper(), userId);
+	}
+
+	public List<Cart> getDeliveredOrdersShow() {
 		String query = "SELECT userid, hotelid, foodid, foodname, quantity, totalprice, mealtime, currentdate,price, payment, delivery_status FROM cart WHERE active = 0";
 		return jdbcTemplate.query(query, new PurchaseMapper());
 	}
@@ -378,4 +383,5 @@ public class UserImpl implements UserDAO {
 		Integer price = jdbcTemplate.queryForObject(query, Integer.class, foodId);
 		return price != null ? price : 0;
 	}
+
 }

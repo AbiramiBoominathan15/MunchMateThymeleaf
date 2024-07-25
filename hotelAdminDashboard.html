@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href=@{/css/hotelAdminDashboard.css}> 
+<title>HotelAdmin Page</title>
+</head>
+<body>
+	<section class="menu">
+		<div class="nav">
+			<div class="logo">
+				<img src="Picture/logomuchmate1.png" alt="Logo">
+				<h1>
+					Munch<b style="color: #ff511c">Mate</b>
+				</h1>
+			</div>
+			<ul>
+				<li><a class="home" th:href="@{/hotelAdminDashboard}">Home</a></li>
+            <li>
+                <form th:action="@{/hotelmenu}" method="post">
+                    <button class="order" type="submit">Orders</button>
+                </form>
+            </li>
+				<li><a th:href="@{/foodList}">Menu</a></li>
+				<li>
+					<form action="/orderView" method="post">
+						<input type="hidden" id="hotelid" name="hotelid" th:value="${session.hotelId}" required>
+						<input type="submit" class="purchase" value="Purchase">
+					</form>
+				</li>
+				<li><a th:href="@{/contactPageUser}">Contact</a></li>
+				<li><a th:href="@{/aboutPageUser}">AboutUs</a></li>
+			</ul>
+        <a class="signin" th:href="@{/index}">LogOut</a>
+		</div>
+	</section>
+	<section class="main"></section>
+	<section class="footer">
+		<p>&copy; 2024 MunchMate. All rights reserved.</p>
+	</section>
+</body>
+</html>

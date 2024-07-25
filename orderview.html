@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" th:href=@{/css/orderview.css}> 
+       
+       
+    <title>Order View</title>
+</head>
+<body>
+
+<section class="menu">
+    <div class="nav">
+        <div class="logo">
+            <img src="Picture/logomuchmate1.png" alt="Logo">
+            <h1>Munch<b style="color:#ff511c">Mate</b></h1>
+        </div>
+        <ul>
+				<li><a class="home" th:href="@{/hotelAdminDashboard}">Home</a></li>
+                <li><a th:href="@{/hotels}">Orders</a></li>
+            <li><a href="/foodList">Menu</a></li>
+            <form action="/orderView" method="post">
+                <input type="hidden" id="hotelid" name="hotelid" th:value="${session.hotelId}" required>
+                <li><input type="submit" class="purchase" value="Purchase"></li>
+            </form>
+				<li><a th:href="@{/aboutPageUser}">AboutUs</a></li>
+								<li><a th:href="@{/contactPageUser}">Contact</a></li>
+				
+        </ul>
+        
+        <a class="signin" th:href="@{/index}">Log Out</a>
+    </div>
+</section>
+
+<table>
+    <thead>
+        <tr>
+            <th>Food Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Meal Time</th>
+            <th>Date</th>
+            <th>Delivered status</th>
+            <th>Payment Status</th>
+            <th>Delivered Approved</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="cartItem : ${cartItems}">
+            <td th:text="${cartItem.foodName}"></td>
+            <td th:text="${cartItem.quantity}"></td>
+            <td th:text="${cartItem.totalPrice}"></td>
+            <td th:text="${cartItem.foodSession}"></td>
+         <td th:text="${cartItem.getCurrentdate()}"></td>
+           <td th:text="${cartItem.deliveryStatus}"></td>
+            <td th:text="${cartItem.paymentStatus}"></td>
+            <td>
+                <form action="/updateDeliveryStatus" method="post">
+                    <input type="hidden" id="hotelid" name="hotelid" th:value="${session.hotelId}" required>
+                    <input type="hidden" id="foodName" name="foodName" th:value="${cartItem.foodName}" required>
+                    <select name="delivered">
+                        <option th:selected="${cartItem.deliveryStatus eq 'delivered'}" value="delivered">Delivered</option>
+                        <option th:selected="${cartItem.deliveryStatus eq 'on_process'}" value="on_process">On Process</option>
+                        <option th:selected="${cartItem.deliveryStatus eq 'Accepted'}" value="Accepted">Accepted</option>
+                                                <option th:selected="${cartItem.deliveryStatus eq 'canceled'}" value="Canceled">Canceled</option>
+                        
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2"><b>Total Amount:</b></td>
+            <td colspan="6"><b th:text="${totalAmount}"></b></td>
+        </tr>
+    </tfoot>
+</table>
+    </div>
+
+
+<section class="footer">
+    <p>&copy; 2024 MunchMate. All rights reserved.</p>
+</section>
+
+</body>
+</html>
+ 
+ 

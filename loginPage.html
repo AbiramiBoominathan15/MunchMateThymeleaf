@@ -1,0 +1,180 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href=@{/css/logincss.css}> 
+</head>
+<body>
+    <section class="menu">
+        <div class="nav">
+            <div class="logo">
+                <img src="Picture/logomuchmate1.png" alt="Logo">
+                <h1>Munch<b>Mate</b></h1>
+            </div>
+            <ul>
+                <li><a class="home" th:href="@{/index}">Home</a></li>
+                <li><a th:href="@{/aboutPageUser}">About Us</a></li>
+                <li><a th:href="@{/contactPageUser}">Contact</a></li>
+            </ul>
+            <a class="signin" th:href="@{/signup}">Sign Up</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="login-background">
+            <div class="login-box">
+                <h2>Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" required title="Please enter a valid email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="login-button">Login</button>
+                    </div>
+                    <div id="alertContainer" th:if="${message}">
+                        <div class="alert alert-danger" role="alert" th:text="${message}"></div>
+                    </div>
+                    <footer>
+                        <span class="footer-buttons">Don't have an account?&nbsp;&nbsp;<a th:href="@{/signup}">Signup</a></span>
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+  -->
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/logincss.css}">
+    <style>
+        .valid-feedback {
+            color: green;
+            display: none;
+        }
+
+        .invalid-feedback {
+            color: red;
+            display: none;
+        }
+
+        input.valid ~ .valid-feedback {
+            display: inline;
+        }
+
+        input.invalid ~ .invalid-feedback {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <section class="menu">
+        <div class="nav">
+            <div class="logo">
+                <img src="Picture/logomuchmate1.png" alt="Logo">
+                <h1>Munch<b>Mate</b></h1>
+            </div>
+            <ul>
+                <li><a class="home" th:href="@{/index}">Home</a></li>
+                <li><a th:href="@{/aboutPageUser}">About Us</a></li>
+                <li><a th:href="@{/contactPageUser}">Contact</a></li>
+            </ul>
+            <a class="signin" th:href="@{/signup}">Sign Up</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="login-background">
+            <div class="login-box">
+                <h2>Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required title="Please enter a valid email address">
+                        <span class="valid-feedback">✔</span>
+                        <span class="invalid-feedback">
+                        Please enter a valid email address.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                        <span class="valid-feedback">✔</span>
+                        <span class="invalid-feedback">Password is required.</span>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="login-button">Login</button>
+                    </div>
+                    <div id="alertContainer" th:if="${message}">
+                        <div class="alert alert-danger" role="alert" th:text="${message}"></div>
+                    </div>
+                    <footer>
+                        <span class="footer-buttons">Don't have an account?&nbsp;&nbsp;<a th:href="@{/signup}">Signup</a></span>
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input[type="text"], input[type="password"]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateInput(input));
+                input.addEventListener('keyup', () => validateInput(input));
+            });
+
+            form.addEventListener("submit", function(event) {
+                event.preventDefault(); 
+
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    isValid = validateInput(input) && isValid;
+                });
+
+                if (isValid) {
+                    form.submit(); 
+                } else {
+                    alert('Please check the form for errors.');
+                }
+            });
+
+            function validateInput(input) {
+                const value = input.value.trim();
+                const pattern = input.getAttribute('pattern');
+                let isValid = true;
+
+                if (pattern) {
+                    const regex = new RegExp(pattern);
+                    isValid = regex.test(value);
+                } else {
+                    isValid = value !== '';
+                }
+
+                if (isValid) {
+                    input.classList.add('valid');
+                    input.classList.remove('invalid');
+                } else {
+                    input.classList.add('invalid');
+                    input.classList.remove('valid');
+                }
+
+                return isValid;
+            }
+        });
+    </script>
+</body>
+</html>
+  

@@ -1,14 +1,18 @@
 package com.chainsys.munchmate.dao;
+
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 import com.chainsys.munchmate.model.Cart;
 import com.chainsys.munchmate.model.Food;
 import com.chainsys.munchmate.model.Hotel;
 import com.chainsys.munchmate.model.User;
+
 @Repository
 public interface UserDAO {
-	
-	public void save(User user) ;
+
+	public void save(User user);
 
 	public void hotelRegistration(Hotel hotel);
 
@@ -70,15 +74,19 @@ public interface UserDAO {
 
 	public void updateDeliveryStatus(Cart cartItem);
 
-	public List<Cart> getDeliveredOrders();
-	
 	public void updateUserDetails(String name, String newName, String newPhoneNumber);
-	
+
 	public String getUserName(String email);
+
 	public List<Food> getFoodsByMealTime(String mealTime);
 
 	public void updateCartItemPrice(int foodId, double price);
+
 	public int getFoodPrice(int foodId);
 
+	public List<Cart> getDeliveredOrders(int userId);
 
+	public List<Cart> getDeliveredOrdersShow();
+	
+	 
 }

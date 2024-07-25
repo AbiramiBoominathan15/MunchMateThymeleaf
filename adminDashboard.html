@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+	    <link rel="stylesheet" th:href=@{/css/adminDashboard.css}> 
+    
+</head>
+<body>
+    <section class="menu">
+        <div class="nav">
+            <div class="logo">
+				<img th:src="@{/Picture/logomuchmate1.png}" src="Picture/logomuchmate1.png" alt="Logo">
+                <h1>
+                    Munch<b style="color: #ff511c">Mate</b>
+                </h1>
+            </div>
+            <ul>
+                <li><a class="home" th:href="@{/index}">Home</a></li>
+                <li><a th:href="@{/hotels}">Orders</a></li>
+                <li><a th:href="@{/food}">Menu</a></li>
+                <li><a th:href="@{/deliveredordersshow}">Purchase</a></li>
+                <li><a th:href="@{/listofusers}">User</a></li>
+                <li><a th:href="@{/about}">AboutUs</a></li>
+                <li><a th:href="@{/contact}">Contact</a></li>
+            </ul>
+            <a class="signin" th:href="@{/index}">Log Out</a>
+        </div>
+    </section>
+    <section class="main"></section>
+    <section class="footer">
+        <p>&copy; 2024 MunchMate. All rights reserved.</p>
+    </section>
+</body>
+</html>

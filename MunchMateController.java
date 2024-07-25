@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.chainsys.munchmate.dao.UserDAO;
 import com.chainsys.munchmate.model.Cart;
@@ -70,7 +70,7 @@ public class MunchMateController {
 	/*
 	 * @RequestMapping("/menu") public String foodMenu() { return "hotelDetails"; }
 	 */
-	
+
 
 	@PostMapping("/register")
 	public String saveUser(@RequestParam("name") String name, @RequestParam("password") String password,
@@ -139,7 +139,7 @@ public class MunchMateController {
 	@GetMapping("/hotels")
 	public String getAllHotels(Model model) {
 		List<Hotel> hotels = userDao.getAllHotels();
-		
+
 		model.addAttribute("hotels", hotels);
 		for (Hotel hotel : hotels) {
 			String base64Image = Base64.getEncoder().encodeToString(hotel.getHotelImage());
@@ -178,7 +178,6 @@ public class MunchMateController {
 
 		}
 	}
-
 	@PostMapping("/updateApproval")
 	public String updateApproval(@RequestParam("hotelId") int hotelId, @RequestParam("approved") String approved) {
 		Hotel hotel = new Hotel();
@@ -219,28 +218,6 @@ public class MunchMateController {
 		}
 	}
 
-	/*
-	 * @GetMapping("/foodList") public String showFoodList(Model model, HttpSession
-	 * session) { int hotelId = (int) session.getAttribute("hotelId"); List<Food>
-	 * foodList = userDao.getFoodsByHotelId(hotelId); model.addAttribute("foodList",
-	 * foodList); System.out.println(foodList);
-	 * 
-	 * return "menu";
-	 * 
-	 * }
-	 */
-
-	/*
-	 * @GetMapping("/foodList") public String showFoodList(Model model, HttpSession
-	 * session) { int hotelId = (int) session.getAttribute("hotelId"); List<Food>
-	 * foodList = userDao.getFoodsByHotelId(hotelId);
-	 * 
-	 * for (Food food : foodList) { String base64Image =
-	 * Base64.getEncoder().encodeToString(food.getFoodImage());
-	 * food.setBase64Image(base64Image); }
-	 * 
-	 * model.addAttribute("foodList", foodList); return "menu"; }
-	 */
 	@GetMapping("/foodList")
 	public String showFoodList(Model model, HttpSession session) {
 
@@ -282,16 +259,12 @@ public class MunchMateController {
 			mealTime = "Dinner";
 		}
 
-//		List<Food> foods = userDao.getAllFoods();
 		List<Food> foods = userDao.getFoodsByMealTime(mealTime);
 
 		for (Food food : foods) {
 			String base64Image = Base64.getEncoder().encodeToString(food.getFoodImage());
 			food.setBase64Image(base64Image);
 		}
-		/*
-		 * System.out.println("fs--->" + food.getFoodSession());
-		 */
 		model.addAttribute("foods", foods);
 
 		System.out.println("------>showFoodListt");
@@ -338,9 +311,6 @@ cartItem.setFoodPrice(price);
 		System.out.println("foodprice"+price);
 
 		userDao.addToCart(cartItem);
-		/*
-		 * userDao.updateQuantities(foodid, quantity);
-		 */
 
 		return "redirect:/foods";
 
@@ -397,53 +367,6 @@ cartItem.setFoodPrice(price);
 		userDao.removeCartItem(foodId);
 		return "redirect:/cartlist";
 	}
-
-	/*
-	 * 382 438
-	 * 
-	 * @PostMapping("/updateCartItemQuantity") public String
-	 * updateCartItemQuantity(@RequestParam("foodId") int
-	 * foodId, @RequestParam("quantity") int quantity, HttpSession session, Model
-	 * model) { int userId = (int) session.getAttribute("userid"); double price = 0;
-	 * double totalPrice = 0; System.out.println("food:"+foodId);
-	 * userDao.updateCartItemQuantity(foodId, quantity);
-	 * 
-	 * 
-	 * session.setAttribute("foodId", foodId);
-	 * 
-	 * session.setAttribute("quantity", quantity);
-	 * 
-	 * List<Cart> cartItems = userDao.viewCart(userId);
-	 * 
-	 * 
-	 * 
-	 * for (Cart cartItem : cartItems) { price = userDao.getFoodPrice(foodId);
-	 * cartItem.setQuantity(quantity); System.out.println("Price :"+price);
-	 * totalPrice=price * quantity; cartItem.setTotalPrice(totalPrice);
-	 * System.out.println("total price -" + cartItem.getTotalPrice());
-	 * System.out.println("quantity -" + cartItem.getQuantity());
-	 * 
-	 * } userDao.updateCartItemPrice(foodId, totalPrice);
-	 * 
-	 * int hour = LocalTime.now().getHour(); String mealTime; if (hour >= 6 && hour
-	 * < 12) { mealTime = "Breakfast"; } else if (hour >= 12 && hour < 17) {
-	 * mealTime = "Lunch"; } else { mealTime = "Dinner"; }
-	 * 
-	 * double overAllPrice = 0; for (Cart cartItem : cartItems) { overAllPrice +=
-	 * cartItem.getTotalPrice();
-	 * 
-	 * 
-	 * } List<Cart> filteredCartItems = cartItems.stream() .filter(item ->
-	 * item.getFoodSession().equalsIgnoreCase(mealTime)).collect(Collectors.toList()
-	 * );
-	 * 
-	 * System.out.println(filteredCartItems.get(0));
-	 * System.out.println(filteredCartItems.get(1));
-	 * System.out.println(filteredCartItems.get(2)); model.addAttribute("cart",
-	 * filteredCartItems); model.addAttribute("cartItems", cartItems);
-	 * model.addAttribute("overAllPrice", overAllPrice); return "viewCart"; }
-	 * 
-	 */
 	@PostMapping("/updateCartItemQuantity")
 	public String updateCartItemQuantity(@RequestParam("foodId") int foodId, @RequestParam("quantity") int quantity,
 			HttpSession session, Model model) {
@@ -453,7 +376,7 @@ cartItem.setFoodPrice(price);
 
 		List<Cart> cartItems = userDao.viewCart(userId);
 
-		
+
 		double overAllPrice = 0;
 
 		double updatedItemTotalPrice = 0;
@@ -515,6 +438,7 @@ cartItem.setFoodPrice(price);
 		model.addAttribute("cartItems", cartItems);
 		model.addAttribute("totalAmount", totalAmount);
 
+
 		/* return "orderview.jsp"; */
 		return "orderview";
 	}
@@ -548,6 +472,11 @@ cartItem.setFoodPrice(price);
 	@GetMapping("/foodSearchh")
 	public String searchFoodMenu(@RequestParam("foodName") String foodName, Model model) {
 		List<Food> foods = userDao.searchFoodByName(foodName);
+		for (Food food : foods) {
+			String base64Image = Base64.getEncoder().encodeToString(food.getFoodImage());
+			food.setBase64Image(base64Image);
+		}
+
 		model.addAttribute("foodList", foods);
 		return "/menu";
 	}
@@ -559,17 +488,24 @@ cartItem.setFoodPrice(price);
 		cartItem.setHotelId(hotelId);
 		cartItem.setDeliveryStatus(delivered);
 		cartItem.setFoodName(foodName);
-		/*
-		 * System.out.println("<--->" + cartItem.getHotelId());
-		 * System.err.println("<--->" + cartItem.getDeliveryStatus());
-		 */ System.out.println(cartItem.getFoodName());
+		 System.out.println(cartItem.getFoodName());
 		userDao.updateDeliveryStatus(cartItem);
 		return "hotelAdminDashboard";
 	}
 
 	@GetMapping("/deliveredOrders")
-	public String showDeliveredOrders(Model model) {
-		List<Cart> deliveredOrders = userDao.getDeliveredOrders();
+	public String showDeliveredOrders(Model model,HttpSession session) {
+		int userId = (int) session.getAttribute("userid");
+
+		List<Cart> deliveredOrders = userDao.getDeliveredOrders(userId);
+		System.out.println(deliveredOrders);
+		model.addAttribute("deliveredOrders", deliveredOrders);
+		return "deliveredOrders";
+	}
+	@GetMapping("/deliveredordersshow")
+	public String showDeliveredOrdersShow(Model model) {
+
+		List<Cart> deliveredOrders = userDao.getDeliveredOrdersShow();
 		System.out.println(deliveredOrders);
 		model.addAttribute("deliveredOrders", deliveredOrders);
 		return "deliveredOrders";

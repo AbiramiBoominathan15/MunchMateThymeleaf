@@ -1,0 +1,808 @@
+<!-- <!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link th:href="@{/slick/slick.grid.min.css}" rel="stylesheet" />
+<link th:href="@{/slick/slick-default-theme.min.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/slick/jquery-ui-1.8.16.custom.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/slick.grid.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/custom-slickgrid.css}"
+	type="text/css" />
+
+
+<title>User Details</title>
+<script src="slick/jquery-3.6.4.min.js"></script>
+<script src="slick/jquery-ui-1.8.16.custom.min.js"></script>
+
+<script src="slick/jquery.event.drag-2.3.js"></script>
+<script src="slick/jquery.event.drop-2.3.js"></script>
+<script src="slick/slick.core.js"></script>
+<script src="slick/slick.dataview.js"></script>
+<script src="slick/slick.grid.js"></script>
+<script src="slick/firebugx.js"></script>
+<script src="slick/slick.formatters.js"></script>
+<script src="slick/slick.editors.js"></script>
+<script src="slick/slick.core.frozen.js"></script>
+
+
+
+Your styles
+<style>
+.container {
+	width: 101%;
+	margin: 0 auto;
+	font-family: Arial, sans-serif;
+}
+
+#userGrid {
+	width: 100%;
+	height: 500px;
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 100px;
+	background-color: #9fd3c7;
+	backdrop-filter: blur(10px);
+}
+
+.nav .logo {
+	display: flex;
+	align-items: center;
+}
+
+.nav .logo img {
+	width: 60px;
+	height: auto;
+	margin-right: 10px;
+}
+
+.nav .logo h1 {
+	font-weight: 600;
+	font-size: 24px;
+	color: #333;
+}
+
+.nav ul {
+	display: flex;
+	list-style: none;
+}
+
+.nav ul li {
+	margin-right: 30px;
+}
+
+.nav ul li a {
+	text-decoration: none;
+	color: #333;
+	font-weight: 500;
+	font-size: 17px;
+	transition: color 0.3s ease;
+}
+
+.nav ul li a:hover {
+	color: #ff511c;
+}
+
+.signin {
+	color: #ff511c;
+	text-decoration: none;
+	padding: 8px 16px;
+	border: 2px solid #ff511c;
+	border-radius: 5px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.signin:hover {
+	background-color: #ff511c;
+	color: white;
+}
+
+.footer {
+	background-color: #9fd3c7;
+	padding: 20px;
+	text-align: center;
+	color: #333;
+}
+</style>
+</head>
+<body>
+	<section class="menu">
+		<div class="nav">
+			<div class="logo">
+				<img src="Picture/logomuchmate1.png" alt="Logo">
+				<h1>
+					Munch<b>Mate</b>
+				</h1>
+			</div>
+			<ul>
+				<li><a class="home" th:href="@{/index}">Home</a></li>
+				<li><a th:href="@{/aboutPage}">About Us</a></li>
+				<li><a th:href="@{/contactPage}">Contact</a></li>
+			</ul>
+			<a class="signin" th:href="@{/logout}">Log Out</a>
+		</div>
+	</section>
+	<div class="container">
+		<h2 th:text="'User Details'"></h2>
+		<div id="userGrid"></div>
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready()
+		{
+
+			var grid;
+			var columns = [ {
+				id : "userId",
+				name : "User ID",
+				field : "userId",
+				width : 80,
+				sortable : true
+			}, {
+				id : "name",
+				name : "Name",
+				field : "name",
+				width : 100,
+				sortable : true
+
+			}, {
+				id : "phoneNumber",
+				name : "Phone Number",
+				field : "phoneNumber",
+				width : 120,
+				sortable : true
+
+			}, {
+				id : "city",
+				name : "City",
+				field : "city",
+				width : 100,
+				sortable : true
+
+			}, {
+				id : "Email",
+				name : "Email",
+				field : "mailId",
+				width : 200,
+				sortable : true
+
+			}, {
+				id : "action",
+				name : "Action",
+				field : "action",
+				width : 100,
+				sortable : true,
+
+				formatter : actionFormatter
+			} ];
+
+			var options = {
+				enableCellNavigation : true,
+				enableColumnReorder : false,
+				editable : true,
+				multiColumnSort : true
+
+			};
+
+			var data = /*[[${users}]]*/[];
+
+			for (i = 0; i < data.length; i++) {
+
+				data[i].id = data[i].userId;
+			}
+
+			function actionFormatter(row, cell, value, columnDef, dataContext) {
+				return value;
+
+			}
+
+			dataView = new Slick.Data.DataView();
+
+			grid = new Slick.Grid("#userGrid", data, columns, options);
+			dataView.onRowCountChanged.subscribe(function(e, args) {
+				grid.updateRowCount();
+				grid.render();
+			});
+
+			dataView.onRowsChanged.subscribe(function(e, args) {
+				grid.invalidateRows(args.rows);
+				grid.render();
+			});
+			grid.onCellChange.subscribe(function(e, args) {
+				dataView.updateItem(args.item.id, args.item);
+			});
+
+			grid.onSort.subscribe(function(e, args) {
+				var cols = args.sortCols;
+				dataView.sort(function(dataRow1, dataRow2) {
+					for (var i = 0, l = cols.length; i < l; i++) {
+						var field = cols[i].sortCol.field;
+						var sign = cols[i].sortAsc ? 1 : -1;
+						var value1 = dataRow1[field], value2 = dataRow2[field];
+						var result = (value1 == value2 ? 0
+								: (value1 > value2 ? 1 : -1))
+								* sign;
+						if (result != 0) {
+							return result;
+						}
+					}
+					return 0;
+				});
+				grid.invalidate();
+				grid.render();
+			});
+			grid.init();
+			grid.setHeaderRowVisibility(false);
+			dataView.beginUpdate();
+			dataView.setItems(data);
+			/* 		        dataView.setFilter(filter);
+			 */dataView.endUpdate();
+			grid.render();
+			grid.resizeCanvas();
+
+			console.log("SlickGrid initialized successfully");
+		}
+
+		/*]]>*/
+	</script>
+
+	JavaScript libraries
+</body>
+</html>
+
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link th:href="@{/slick/slick.grid.min.css}" rel="stylesheet" />
+<link th:href="@{/slick/slick-default-theme.min.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/slick/jquery-ui-1.8.16.custom.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/slick.grid.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/custom-slickgrid.css}"
+	type="text/css" />
+    <link rel="stylesheet" th:href=@{/css/customerReadCss.css}> 
+
+
+<title>User Details</title>
+<script src="slick/jquery-3.6.4.min.js"></script>
+<script src="slick/jquery-ui-1.8.16.custom.min.js"></script>
+
+<script src="slick/jquery.event.drag-2.3.js"></script>
+<script src="slick/jquery.event.drop-2.3.js"></script>
+<script src="slick/slick.core.js"></script>
+<script src="slick/slick.dataview.js"></script>
+<script src="slick/slick.grid.js"></script>
+<script src="slick/firebugx.js"></script>
+<script src="slick/slick.formatters.js"></script>
+<script src="slick/slick.editors.js"></script>
+<script src="slick/slick.core.frozen.js"></script>
+
+<style>
+   body {
+	margin: 0;
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	font-family: Arial, sans-serif; 
+}
+.main {
+/* 	background-image:
+		url("https://static.vecteezy.com/system/resources/previews/024/214/119/non_2x/enjoy-your-meal-illustration-a-variety-of-delicious-food-in-home-or-restaurant-in-flat-cartoon-hand-drawn-landing-page-background-templates-vector.jpg");
+ */	background-size: cover;
+	background-position: center;
+	height: 135%;
+}
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 100px;
+	background-color: #9fd3c7;
+	backdrop-filter: blur(10px);
+}
+
+.nav .logo {
+	display: flex;
+	align-items: center;
+}
+
+.nav .logo img {
+	width: 60px;
+	height: auto;
+	margin-right: 10px;
+}
+
+.nav .logo h1 {
+	font-weight: 600;
+	font-size: 24px;
+	color: #333;
+}
+
+.nav ul {
+	display: flex;
+	list-style: none;
+}
+
+.nav ul li {
+	margin-right: 30px;
+}
+
+.nav ul li a {
+	text-decoration: none;
+	color: #333;
+	font-weight: 500;
+	font-size: 17px;
+	transition: color 0.3s ease;
+}
+.nav ul li a:hover {
+	color: #ff511c;
+}
+.signin {
+	color: #ff511c;
+	text-decoration: none;
+	padding: 8px 16px;
+	border: 2px solid #ff511c;
+	border-radius: 5px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+.signin:hover {
+	background-color: #ff511c;
+	color: white;
+}
+.footer {
+	background-color: #9fd3c7;
+	padding: 20px;
+	text-align: center;
+	color: #333;
+}
+    
+
+</style>
+</head>
+<body>
+    <section class="menu">
+        <div class="nav">
+            <div class="logo">
+				<img th:src="@{/Picture/logomuchmate1.png}" src="Picture/logomuchmate1.png" alt="Logo">
+                <h1>
+                    Munch<b style="color: #ff511c">Mate</b>
+                </h1>
+            </div>
+            <ul>
+                <li><a class="home" th:href="@{/index}">Home</a></li>
+                <li><a th:href="@{/hotels}">Orders</a></li>
+                <li><a th:href="@{/food}">Menu</a></li>
+                <li><a th:href="@{/deliveredordersshow}">Purchase</a></li>
+                <li><a th:href="@{/listofusers}">User</a></li>
+                <li><a th:href="@{/aboutPageUser}">About Us</a></li>
+                <li><a th:href="@{/contactPageUser}">Contact</a></li>
+            </ul>
+            <a class="signin" th:href="@{/index}">Log Out</a>
+        </div>
+    </section>
+	<div class="container">
+		<h2 th:text="'User Details'"></h2>
+		<div id="userGrid"></div>
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready()
+		{
+
+			var grid;
+			var columns = [ {
+				id : "userId",
+				name : "User ID",
+				field : "userId",
+				width : 80,
+				sortable : true
+			}, {
+				id : "name",
+				name : "Name",
+				field : "name",
+				width : 100,
+				sortable : true
+
+			}, {
+				id : "phoneNumber",
+				name : "Phone Number",
+				field : "phoneNumber",
+				width : 120,
+				sortable : true
+
+			}, {
+				id : "city",
+				name : "City",
+				field : "city",
+				width : 100,
+				sortable : true
+
+			}, {
+				id : "Email",
+				name : "Email",
+				field : "mailId",
+				width : 200,
+				sortable : true
+
+			}];
+
+			var options = {
+				enableCellNavigation : true,
+				enableColumnReorder : false,
+				editable : true,
+				multiColumnSort : true
+
+			};
+
+			var data = /*[[${users}]]*/[];
+
+			for (i = 0; i < data.length; i++) {
+
+				data[i].id = data[i].userId;
+			}
+
+			function actionFormatter(row, cell, value, columnDef, dataContext) {
+				return value;
+
+			}
+
+			dataView = new Slick.Data.DataView();
+
+			grid = new Slick.Grid("#userGrid", data, columns, options);
+			dataView.onRowCountChanged.subscribe(function(e, args) {
+				grid.updateRowCount();
+				grid.render();
+			});
+
+			dataView.onRowsChanged.subscribe(function(e, args) {
+				grid.invalidateRows(args.rows);
+				grid.render();
+			});
+			grid.onCellChange.subscribe(function(e, args) {
+				dataView.updateItem(args.item.id, args.item);
+			});
+
+			grid.onSort.subscribe(function(e, args) {
+				var cols = args.sortCols;
+				dataView.sort(function(dataRow1, dataRow2) {
+					for (var i = 0, l = cols.length; i < l; i++) {
+						var field = cols[i].sortCol.field;
+						var sign = cols[i].sortAsc ? 1 : -1;
+						var value1 = dataRow1[field], value2 = dataRow2[field];
+						var result = (value1 == value2 ? 0
+								: (value1 > value2 ? 1 : -1))
+								* sign;
+						if (result != 0) {
+							return result;
+						}
+					}
+					return 0;
+				});
+				grid.invalidate();
+				grid.render();
+			});
+			grid.init();
+			grid.setHeaderRowVisibility(false);
+			dataView.beginUpdate();
+			dataView.setItems(data);
+			/* 		        dataView.setFilter(filter);
+			 */dataView.endUpdate();
+			grid.render();
+			grid.resizeCanvas();
+
+			console.log("SlickGrid initialized successfully");
+		}
+
+		/*]]>*/
+	</script>
+
+        <section class="footer">
+        <p>&copy; 2024 MunchMate. All rights reserved.</p>
+    </section>
+</body>
+</html>
+  -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link th:href="@{/slick/slick.grid.min.css}" rel="stylesheet" />
+<link th:href="@{/slick/slick-default-theme.min.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/slick/jquery-ui-1.8.16.custom.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/slick.grid.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/slick/custom-slickgrid.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href=@{/css/customerReadCss.css}>
+
+<title>User Details</title>
+<script src="slick/jquery-3.6.4.min.js"></script>
+<!-- <script src="slick/jquery-ui-1.8.16.custom.min.js"></script> -->
+<script src="slick/jquery.event.drag-2.3.js"></script>
+<script src="slick/jquery.event.drop-2.3.js"></script>
+<script src="slick/slick.core.js"></script>
+<script src="slick/slick.dataview.js"></script>
+<script src="slick/slick.grid.js"></script>
+<script src="slick/firebugx.js"></script>
+<script src="slick/slick.formatters.js"></script>
+<script src="slick/slick.editors.js"></script>
+<script src="slick/slick.core.frozen.js"></script>
+
+<style>
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+	background-color: #f0f8ff;
+}
+
+.main {
+	background-size: cover;
+	background-position: center;
+	height: 135%;
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 100px;
+	background-color: #9fd3c7;
+	backdrop-filter: blur(10px);
+}
+
+.nav .logo {
+	display: flex;
+	align-items: center;
+}
+
+.nav .logo img {
+	width: 60px;
+	height: auto;
+	margin-right: 10px;
+}
+
+.nav .logo h1 {
+	font-weight: 600;
+	font-size: 24px;
+	color: #333;
+}
+
+.nav ul {
+	display: flex;
+	list-style: none;
+}
+
+.nav ul li {
+	margin-right: 30px;
+}
+
+.nav ul li a {
+	text-decoration: none;
+	color: #333;
+	font-weight: 500;
+	font-size: 17px;
+	transition: color 0.3s ease;
+}
+
+.nav ul li a:hover {
+	color: #5585b5;
+}
+
+.signin {
+	color: #ff511c;
+	text-decoration: none;
+	padding: 8px 16px;
+	border: 2px solid #ff511c;
+	border-radius: 5px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.signin:hover {
+	background-color: #ff511c;
+	color: white;
+}
+
+/* .container {
+	width: 100%;
+	margin: 50px auto;
+	background-color: #ffffff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	padding: 20px;
+	text-align: center;
+}
+
+ */#userGrid {
+	width: 100%;
+	height: 500px;
+	margin: 20px 0;
+}
+
+h2 {
+	color: #5585b5;
+}
+
+.footer {
+	background-color: #9fd3c7;
+	padding: 20px;
+	text-align: center;
+	color: #333;
+}
+#searchInput{
+position:relative;
+top:50px;
+left:999px;
+}
+.slick-header-column {
+	background-color: #ddd !important; /* Default header background color */
+}
+
+.slick-header-column.userId,
+.slick-header-column.password,
+.slick-header-column.name {
+	background-color: #5585b5 !important; /* Custom header background color */
+	color: white; /* Custom header text color */
+}
+
+</style>
+</head>
+<body>
+	<section class="menu">
+		<div class="nav">
+			<div class="logo">
+				<img th:src="@{/Picture/logomuchmate1.png}"
+					src="Picture/logomuchmate1.png" alt="Logo">
+				<h1>
+					Munch<b style="color: #ff511c">Mate</b>
+				</h1>
+			</div>
+			<ul>
+				<li><a class="home" th:href="@{/index}">Home</a></li>
+				<li><a th:href="@{/hotels}">Orders</a></li>
+				<li><a th:href="@{/food}">Menu</a></li>
+				<li><a th:href="@{/deliveredordersshow}">Purchase</a></li>
+				<li><a th:href="@{/listofusers}">User</a></li>
+				<li><a th:href="@{/aboutPageUser}">About Us</a></li>
+				<li><a th:href="@{/contactPageUser}">Contact</a></li>
+			</ul>
+			<a class="signin" th:href="@{/index}">Log Out</a>
+		</div>
+	</section>
+	<input type="text" id="searchInput" class="form-control mb-3"
+		placeholder="Search...">
+
+	<div class="container">
+	<center>
+		<h2>User Details</h2></center>
+		<div id="userGrid"></div>
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready()
+		{
+			var grid;
+			var columns = [ {
+				id : "userId",
+				name : "User ID",
+				field : "userId",
+				width : 290,
+				sortable : true
+			}, {
+				id : "name",
+				name : "Name",
+				field : "name",
+				width : 290,
+				sortable : true
+			}, {
+				id : "phoneNumber",
+				name : "Phone Number",
+				field : "phoneNumber",
+				width : 290,
+				sortable : true
+			}, {
+				id : "city",
+				name : "City",
+				field : "city",
+				width : 290,
+				sortable : true
+			}, {
+				id : "Email",
+				name : "Email",
+				field : "mailId",
+				width : 290,
+				sortable : true
+			} ];
+
+			var options = {
+				enableCellNavigation : true,
+				enableColumnReorder : false,
+				editable : true,
+				multiColumnSort : true
+			};
+
+			var data = /*[[${users}]]*/[];
+
+			for (i = 0; i < data.length; i++) {
+				data[i].id = data[i].userId;
+			}
+
+			dataView = new Slick.Data.DataView();
+
+			grid = new Slick.Grid("#userGrid", data, columns, options);
+			dataView.onRowCountChanged.subscribe(function(e, args) {
+				grid.updateRowCount();
+				grid.render();
+			});
+
+			dataView.onRowsChanged.subscribe(function(e, args) {
+				grid.invalidateRows(args.rows);
+				grid.render();
+			});
+
+			grid.onCellChange.subscribe(function(e, args) {
+				dataView.updateItem(args.item.id, args.item);
+			});
+
+			grid.onSort.subscribe(function(e, args) {
+				var cols = args.sortCols;
+				dataView.sort(function(dataRow1, dataRow2) {
+					for (var i = 0, l = cols.length; i < l; i++) {
+						var field = cols[i].sortCol.field;
+						var sign = cols[i].sortAsc ? 1 : -1;
+						var value1 = dataRow1[field], value2 = dataRow2[field];
+						var result = (value1 == value2 ? 0
+								: (value1 > value2 ? 1 : -1))
+								* sign;
+						if (result != 0) {
+							return result;
+						}
+					}
+					return 0;
+				});
+				grid.invalidate();
+				grid.render();
+			});
+
+			grid.init();
+			grid.setHeaderRowVisibility(false);
+			dataView.beginUpdate();
+			dataView.setItems(data);
+			dataView.endUpdate();
+			grid.render();
+			grid.resizeCanvas();
+
+			console.log("SlickGrid initialized successfully");
+		}
+		$('#searchInput').on('input', function() {
+            var searchTerm = $(this).val().toLowerCase();
+            filteredData = data.filter(function(item) {
+                return Object.values(item).some(function(value) {
+                    return String(value).toLowerCase().includes(searchTerm);
+                });
+            });
+            grid.setData(filteredData);
+            grid.invalidate();
+            grid.render();
+        });
+
+		/*]]>*/
+	</script>
+
+	<section class="footer">
+		<p>&copy; 2024 MunchMate. All rights reserved.</p>
+	</section>
+</body>
+</html>

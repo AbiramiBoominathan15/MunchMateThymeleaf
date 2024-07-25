@@ -3,19 +3,19 @@ package com.chainsys.munchmate.model;
 import java.util.Arrays;
 
 public class Hotel {
-	
 
-	
-	
-	
-	
+
+
+
+
+
 	public int hotelId;
-	
-	
+
+
 	public String hotelName;
 	public String hotelLocation;
 	public String hotelPhoneNumber;
-	
+
     public String base64Image;
 
 	public String getBase64Image() {
@@ -35,11 +35,11 @@ public class Hotel {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
 
 
-	
-	
+
+
+
 	public int getHotelId() {
 		return hotelId;
 	}
@@ -56,8 +56,8 @@ public class Hotel {
 		return hotelLocation;
 	}
 	public void setHotelLocation(String hotelLocation) {
-	
-		
+
+
 		this.hotelLocation = hotelLocation;
 	}
 	public String getHotelPhoneNumber() {
@@ -66,8 +66,8 @@ public class Hotel {
 	public void setHotelPhoneNumber(String hotelPhoneNumber) {
 		this.hotelPhoneNumber = hotelPhoneNumber;
 	}
-	
-	
+
+
 	public String getHotelEmail() {
 		return hotelEmail;
 	}
@@ -111,3 +111,4 @@ public class Hotel {
 		// TODO Auto-generated constructor stub
 	}
 }
+ 

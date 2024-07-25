@@ -3,19 +3,12 @@ package com.chainsys.munchmate.model;
 public class User {
 	
 	
-	public int userId;
-
-	
-	
-	
-	public String name;
-	
-	
-	public String phoneNumber;
-	public String password;
-	public String city;
-	public String mailId;
-
+	private int userId;
+	private String name;
+	private String phoneNumber;
+	private String password;
+	private String city;
+	private String mailId;
 	public int getUserId() {
 		return userId;
 	}
@@ -23,9 +16,6 @@ public class User {
 		this.userId = userId;
 	}
 	public String getName() {
-		
-		
-		
 		return name;
 	}
 	public void setName(String name) {

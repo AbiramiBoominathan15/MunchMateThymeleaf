@@ -18,7 +18,7 @@ public class Food {
 	public String foodName;
     public String base64Image;
 
-	
+
 	public int foodPrice;
 	public String foodCategories;
 	public byte[] foodImage;
@@ -120,7 +120,7 @@ public class Food {
 	}
 	public void setBase64Image(String base64Image) {
         this.base64Image = base64Image;
-		
+
 	}
 
 

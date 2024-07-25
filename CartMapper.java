@@ -1,4 +1,3 @@
-
 package com.chainsys.munchmate.mapper;
 
 import java.sql.ResultSet;
@@ -13,12 +12,12 @@ public class CartMapper implements RowMapper<Cart> {
 	public Cart mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Cart cartItem = new Cart();
 		int userId = rs.getInt(1);
-		int foodid= rs.getInt(2);
-		String foodname = rs.getString(3);	
+		int foodid = rs.getInt(2);
+		String foodname = rs.getString(3);
 		int quantity = rs.getInt(4);
 		int price = rs.getInt(5);
 		String foodSession = rs.getString(6);
-        byte[] image = rs.getBytes("image"); // Retrieve the image as bytes
+		byte[] image = rs.getBytes("image");
 
 		cartItem.setUserId(userId);
 		cartItem.setFoodId(foodid);
@@ -26,7 +25,7 @@ public class CartMapper implements RowMapper<Cart> {
 		cartItem.setQuantity(quantity);
 		cartItem.setTotalPrice(price);
 		cartItem.setFoodSession(foodSession);
-        cartItem.setImage(Base64.getEncoder().encodeToString(image)); 
+		cartItem.setImage(Base64.getEncoder().encodeToString(image));
 
 		return cartItem;
 	}

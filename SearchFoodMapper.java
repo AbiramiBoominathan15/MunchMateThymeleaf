@@ -46,7 +46,7 @@ public class SearchFoodMapper implements RowMapper<Food> {
         if (blob != null) {
             int blobLength = (int) blob.length();
             byte[] blobAsBytes = blob.getBytes(1, blobLength);
-            food.setFoodImage(blobAsBytes);   
+            food.setFoodImage(blobAsBytes);
         }
         food.setFoodName(rs.getString("name"));
         food.setFoodPrice(rs.getInt("price"));

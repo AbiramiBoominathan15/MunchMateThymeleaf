@@ -106,9 +106,9 @@ public class Cart {
 		this.cartItemId = cartItemId;
 		this.userId = userId;
 		this.foodId = foodId;
-		
-		
-		
+
+
+
 		this.totalPrice = totalPrice;
 		this.foodSession = foodSession;
 		this.overAllPrice = overAllPrice;
@@ -117,9 +117,9 @@ public class Cart {
 	public Cart() {
 		// TODO Auto-generated constructor stub
 	}
-	public String foodName;
     private byte[]foodImage;
-    
+	public String foodName;
+
 	public int quantity;
 	public LocalDate currentdate;
 	public String paymentStatus;
@@ -127,7 +127,6 @@ public class Cart {
 	public int cartItemId;
 	public int userId;
 	public int foodId;
-	public double totalPrice;
 	public int getFoodPrice() {
 		return foodPrice;
 	}
@@ -135,8 +134,11 @@ public class Cart {
 		this.foodPrice = foodPrice;
 	}
 	private int foodPrice;
+
 	public String foodSession;
 	public double overAllPrice;
+	public double totalPrice;
+
 	public String deliveryStatus;
 	private String image;
 	public String getImage() {
@@ -147,3 +149,4 @@ public class Cart {
 	}
 
 }
+ 

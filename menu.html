@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" th:href=@{/css/menu.css}> 
+    
+    <title>Food List</title>
+</head>
+<body>
+
+<section class="menu">
+    <div class="nav">
+        <div class="logo">
+            <img src="Picture/logomuchmate1.png" alt="Logo">
+            <h1>Munch<b style="color: #ff511c">Mate</b></h1>
+        </div>
+        <ul>
+            <li><a class="home" href="hotelAdminDashboard">Home</a></li>
+
+            <li>
+                <form th:action="@{/hotelmenu}" method="post">
+                    <button class="order" type="submit">Orders</button>
+                </form>
+            </li>
+
+            <li><a th:href="@{/foodList}">Menu</a></li>
+            <form action="/orderView" method="post">
+                <input type="hidden" id="hotelid" name="hotelid" th:value="${session.hotelId}" required>
+                <li><input type="submit" class="purchase" value="Purchase"></li>
+            </form>
+				<li><a th:href="@{/aboutPageUser}">AboutUs</a></li>
+								<li><a th:href="@{/contactPageUser}">Contact</a></li>
+        </ul>
+        <a class="signin" th:href="@{/index}">Log Out</a>
+    </div>
+</section>
+<h2>Food List</h2>
+<form action="/foodSearchh" class="searchbar" method="get">
+    <label for="foodName"></label> <input type="text" id="foodName"
+                                           name="foodName" required>
+    <button type="submit">Search</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Hotel Name</th>
+        <th>Food Name</th>
+        <th>Food Image</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Category</th>
+        <th>Meal Time</th>
+        <th>Update Price</th>
+        <th>Update Quantity</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="food : ${foodList}">
+        <td th:text="${food.hotelName}"></td>
+        <td th:text="${food.foodName}"></td>
+<td>
+    <img th:src="'data:image/jpeg;base64,' + ${food.base64Image}" alt="Food Image"/>
+</td>
+        <td th:text="${food.foodPrice}"></td>
+        <td th:text="${food.foodQuantity}"></td>
+        <td th:text="${food.foodCategories}"></td>
+        <td th:text="${food.foodSession}"></td>
+        <td>
+            <form action="/updateFoodPrice" method="post">
+                <input type="hidden" name="foodId" th:value="${food.foodId}">
+                New Price: <input type="text" name="newPrice" required>
+                <button type="submit">Update Price</button>
+            </form>
+        </td>
+        <td>
+            <form action="/updateFoodQuantity" method="post">
+                <input type="hidden" name="foodId" th:value="${food.foodId}">
+                New Quantity: <input type="text" name="newQuantity" required>
+                <button type="submit">Update Quantity</button>
+            </form>
+        </td>
+        <td class="delete-form">
+            <form action="/deleteFood" method="post" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                <input type="hidden" name="foodId" th:value="${food.foodId}">
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${foodList.isEmpty()}">
+        <td colspan="10" class="no-items">No food items found</td>
+    </tr>
+    </tbody>
+</table>
+
+<section class="footer">
+    <p>&copy; 2024 MunchMate. All rights reserved.</p>
+</section>
+
+</body>
+</html>

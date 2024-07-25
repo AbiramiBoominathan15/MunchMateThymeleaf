@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+	    <link rel="stylesheet" th:href=@{/css/paymentSuccess.css}> 
+</head>
+<body>
+    <div class="success-container">
+        <h2>Payment Successful</h2>
+        <p>Your payment has been successfully processed.</p>
+        <p>Thank you for your order!</p>
+        <p th:id="delivery-time">Estimated delivery time: <span th:text="${deliveryTime}"></span></p>
+        <a th:href="@{/deliveredOrders}" class="btn-back">Track Your Status</a>
+   </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function generateRandomTime() {
+            var hours = Math.floor(Math.random() * 12) + 1; 
+            var minutes = Math.floor(Math.random() * 60); 
+            var period = Math.random() < 0.5 ? 'AM' : 'PM'; 
+
+            var formattedHours = hours < 10 ? '0' + hours : hours;
+            var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+            var deliveryTime = formattedHours + ':' + formattedMinutes + ' ' + period;
+
+            document.getElementById('delivery-time').textContent = 'Estimated delivery time: ' + deliveryTime;
+        }
+
+        generateRandomTime();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Payment Successful',
+            text: 'Your payment has been successfully processed.',
+            confirmButtonText: 'Track Your Status',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/deliveredOrders';
+            }
+        });
+        /*]]>*/
+    </script>
+</body>
+</html>

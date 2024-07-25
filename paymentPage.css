@@ -1,0 +1,170 @@
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #5585b5;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .nav {
+            background-color: #9fd3c7;
+            padding: 15px 80px;
+            backdrop-filter: blur(10px);
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav .logo img {
+            width: 85px;
+            height: auto;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .nav .logo h1 {
+            font-weight: 600;
+            font-size: 24px;
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav ul li {
+            margin-right: 30px;
+        }
+
+        .nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 17px;
+            transition: color 0.3s ease;
+        }
+
+        .nav ul li a:hover {
+            color: #ff511c;
+        }
+
+        .signin {
+            color: #ff511c;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 2px solid #ff511c;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .signin:hover {
+            background-color: #ff511c;
+            color: white;
+        }
+
+        .payment-container {
+            background-color: #fff;
+            width: 400px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .payment-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            border-color: #ba4357;
+            outline: none;
+        }
+
+        .btn-submit {
+            background-color: #9fd3c7;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 24px auto 0;
+            text-align: center;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #93182c;
+        }
+
+        .logo {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .title {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .menuu {
+            width: 60%;
+        }
+
+        .payment-container {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .image {
+            display: inline-block;
+            vertical-align: middle;
+        }

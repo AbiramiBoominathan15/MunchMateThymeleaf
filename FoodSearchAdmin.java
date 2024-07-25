@@ -5,24 +5,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import com.chainsys.munchmate.model.Food;
+
 public class FoodSearchAdmin implements RowMapper<Food> {
 	public Food mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Food food = new Food(); 
-        food.setHotelName(rs.getString("hotelname"));
-        food.setFoodName(rs.getString("name"));
-        food.setFoodPrice(rs.getInt("price"));
-        food.setFoodQuantity(rs.getInt("quantity"));
-        food.setFoodCategories(rs.getString("catagories"));
-        food.setFoodSession(rs.getString("mealtime"));
-
-        Blob blob = rs.getBlob("image");
-        if (blob != null) {
-            int blobLength = (int) blob.length();
-            byte[] blobAsBytes = blob.getBytes(1, blobLength);
-            food.setFoodImage(blobAsBytes);
-        }
-
-        return food;
-    }
-
+		Food food = new Food();
+		food.setHotelName(rs.getString("hotelname"));
+		food.setFoodName(rs.getString("name"));
+		food.setFoodPrice(rs.getInt("price"));
+		food.setFoodQuantity(rs.getInt("quantity"));
+		food.setFoodCategories(rs.getString("catagories"));
+		food.setFoodSession(rs.getString("mealtime"));
+		Blob blob = rs.getBlob("image");
+		if (blob != null) {
+			int blobLength = (int) blob.length();
+			byte[] blobAsBytes = blob.getBytes(1, blobLength);
+			food.setFoodImage(blobAsBytes);
 		}
+		return food;
+	}
+
+}
